@@ -4,8 +4,7 @@ import codecs
 import json
 import os
 
-import cchardet
-import chardet
+import charset_normalizer
 
 
 def get_log_contents(log_file):
@@ -18,18 +17,20 @@ def get_log_contents(log_file):
 
 
 def detect_chardet(log_data):
-    cchardet_detection = cchardet.detect(log_data)
-    chardet_detection = chardet.detect(log_data)
+    return charset_normalizer.detect(log_data)
 
-    """In cases chardet spews out Windows-1252 as encoding, switch over to cchardet."""
-    if chardet_detection['encoding'] == "Windows-1252":
-        return cchardet_detection
+    # cchardet_detection = cchardet.detect(log_data)
+    # chardet_detection = chardet.detect(log_data)
 
-    """When chardet has higher confidence than cchardet, then we will use chardet."""
-    if (chardet_detection['confidence'] or 0) > (cchardet_detection['confidence'] or 0):
-        return chardet_detection
+    # """In cases chardet spews out Windows-1252 as encoding, switch over to cchardet."""
+    # if chardet_detection["encoding"] == "Windows-1252":
+    #     return cchardet_detection
 
-    return cchardet_detection
+    # """When chardet has higher confidence than cchardet, then we will use chardet."""
+    # if (chardet_detection["confidence"] or 0) > (cchardet_detection["confidence"] or 0):
+    #     return chardet_detection
+
+    # return cchardet_detection
 
 
 def get_log_encoding(log_file):

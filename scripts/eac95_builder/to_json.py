@@ -14,8 +14,7 @@ import sys
 from copy import deepcopy
 from pathlib import Path
 
-import chardet
-
+import charset_normalizer
 import constants
 import generators
 
@@ -47,9 +46,9 @@ def read_files(paths):
             exit()
 
         raw = file_.read_bytes()
-        encoding = chardet.detect(raw)['encoding']
         if encoding not in ['UTF-16' or 'iso-8859-1']:
             encoding = 'iso-8859-1'
+        encoding = charset_normalizer.detect(raw)["encoding"]
 
         try:
             with open(path, 'r', encoding=encoding) as source_file:
